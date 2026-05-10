@@ -1,0 +1,108 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Chef</title>
+
+    <link rel="stylesheet"
+          href="{% static 'delivery/style.css' %}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="ai-page">
+
+    <div class="ai-container">
+
+        <div class="ai-card">
+
+            <div class="ai-top">
+
+                <a href="/" class="back-btn">
+
+                    <i class="fa-solid fa-arrow-left"></i>
+
+                    Home
+
+                </a>
+
+                <button class="dark-mode-btn"
+                        onclick="toggleDarkMode()">
+
+                    🌙
+
+                </button>
+
+            </div>
+
+            <div class="ai-header">
+
+                <h1>
+
+                    👨‍🍳 AI Chef
+
+                </h1>
+
+                <p>
+
+                    Generate recipes for any dish
+                    in the world instantly.
+
+                </p>
+
+            </div>
+
+            <form method="POST"
+                  class="ai-form">
+
+                {% csrf_token %}
+
+                <div class="input-group">
+
+                    <label>
+
+                        Dish Name
+
+                    </label>
+
+                    <input type="text"
+                           name="dish"
+                           placeholder="Pizza, Biryani, Pasta..."
+                           required>
+
+                </div>
+
+                <button type="submit"
+                        class="ai-submit-btn">
+
+                    <i class="fa-solid fa-utensils"></i>
+
+                    Generate Recipe
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="{% static 'delivery/darkmode.js' %}"></script>
+
+</body>
+
+</html>

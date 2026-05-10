@@ -1,0 +1,196 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Sign In | MealMate
+    </title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet"
+          href="{% static 'delivery/style.css' %}">
+
+    <style>
+
+        body{
+
+            background:var(--light-bg);
+        }
+
+        .auth-container{
+
+            min-height:100vh;
+
+            display:flex;
+
+            align-items:center;
+
+            justify-content:center;
+
+            padding:20px;
+        }
+
+        .auth-card{
+
+            background:var(--white);
+
+            padding:40px;
+
+            border-radius:var(--radius-lg);
+
+            box-shadow:var(--shadow-lg);
+
+            width:100%;
+
+            max-width:400px;
+
+            text-align:center;
+        }
+
+        .auth-card .logo{
+
+            font-size:2rem;
+
+            margin-bottom:20px;
+
+            justify-content:center;
+        }
+
+        .auth-card h3{
+
+            margin-bottom:30px;
+
+            color:var(--dark-text);
+        }
+
+        .form-group{
+
+            margin-bottom:20px;
+
+            text-align:left;
+        }
+
+        .form-group label{
+
+            display:block;
+
+            margin-bottom:8px;
+
+            font-weight:500;
+
+            color:var(--dark-text);
+        }
+
+        .form-group input{
+
+            width:100%;
+
+            padding:12px 15px;
+
+            border:1px solid #ddd;
+
+            border-radius:10px;
+
+            font-size:1rem;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="auth-container">
+
+    <div class="auth-card">
+
+        <a href="/"
+           class="logo">
+
+            <i class="fa-solid fa-burger"></i>
+
+            Meal<span>Mate</span>
+
+        </a>
+
+        <h3>
+            Sign In to your account
+        </h3>
+
+        <form action="{% url 'signin' %}"
+              method="post">
+
+            {% csrf_token %}
+
+            <div class="form-group">
+
+                <label>
+                    Username
+                </label>
+
+                <input type="text"
+                       name="username"
+                       required
+                       placeholder="Enter username">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Password
+                </label>
+
+                <input type="password"
+                       name="password"
+                       required
+                       placeholder="Enter password">
+
+            </div>
+
+            <button type="submit"
+                    class="btn btn-primary btn-block btn-glow">
+
+                SIGN IN
+
+            </button>
+
+        </form>
+
+        <p style="
+            margin-top:20px;
+            color:var(--light-text);
+        ">
+
+            Don’t have an account?
+
+            <a href="{% url 'open_signup' %}"
+               style="
+               color:var(--primary-color);
+               font-weight:600;">
+
+                Sign Up
+
+            </a>
+
+        </p>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

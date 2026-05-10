@@ -1,0 +1,233 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Restaurant Finder</title>
+
+    <link rel="stylesheet"
+          href="{% static 'delivery/style.css' %}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+</head>
+
+<body>
+
+<div class="ai-page">
+
+    <div class="ai-container">
+
+        <div class="ai-card">
+
+            <div class="ai-top">
+
+                <a href="/"
+                   class="back-btn">
+
+                    <i class="fa-solid fa-arrow-left"></i>
+
+                    Home
+
+                </a>
+
+                <button class="dark-mode-btn"
+                        onclick="toggleDarkMode()">
+
+                    🌙
+
+                </button>
+
+            </div>
+
+            <div class="ai-header">
+
+                <h1>
+
+                    🍽 AI Restaurant Finder
+
+                </h1>
+
+                <p>
+
+                    Find top rated restaurants near you
+                    based on food preference,
+                    flavour and budget.
+
+                </p>
+
+            </div>
+
+            <form method="POST"
+                  class="ai-form">
+
+                {% csrf_token %}
+
+                <div class="input-group">
+
+                    <label>
+
+                        What do you want to eat?
+
+                    </label>
+
+                    <input type="text"
+                           name="food"
+                           placeholder="Pizza, Biryani, Burger..."
+                           required>
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>
+
+                        Flavour Preference
+
+                    </label>
+
+                    <input type="text"
+                           name="taste"
+                           placeholder="Spicy, Sweet, Cheesy..."
+                           required>
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>
+
+                        Approx Budget (₹)
+
+                    </label>
+
+                    <input type="number"
+                           name="budget"
+                           placeholder="200"
+                           required>
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>
+
+                        Your Location
+
+                    </label>
+
+                    <input type="text"
+                           name="location"
+                           id="locationInput"
+                           placeholder="Detecting location..."
+                           required>
+
+                </div>
+
+                <input type="hidden"
+                       name="latitude"
+                       id="latitude">
+
+                <input type="hidden"
+                       name="longitude"
+                       id="longitude">
+
+                <div id="map"></div>
+
+                <button type="submit"
+                        class="ai-submit-btn">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    Find Best Restaurants
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script src="{% static 'delivery/darkmode.js' %}"></script>
+
+<script>
+
+    const map = L.map('map').setView([20.5937, 78.9629], 5);
+
+    L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {
+            attribution: '&copy; OpenStreetMap contributors'
+        }
+    ).addTo(map);
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position){
+
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            document.getElementById("latitude").value = lat;
+            document.getElementById("longitude").value = lon;
+
+            map.setView([lat, lon], 15);
+
+            L.marker([lat, lon])
+             .addTo(map)
+             .bindPopup("You are here")
+             .openPopup();
+
+            fetch(
+                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+            )
+
+            .then(response => response.json())
+
+            .then(data => {
+
+                document.getElementById("locationInput").value =
+                data.display_name;
+
+            });
+
+        }
+
+    );
+
+</script>
+
+<style>
+
+#map{
+
+    height:350px;
+
+    width:100%;
+
+    border-radius:20px;
+
+    margin-top:20px;
+}
+
+</style>
+
+</body>
+
+</html>

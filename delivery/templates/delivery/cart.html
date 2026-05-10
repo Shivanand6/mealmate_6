@@ -1,0 +1,143 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart | MealMate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'delivery/style.css' %}">
+    <style>
+        body { background: var(--light-bg); }
+        .cart-page-container {
+            padding: 120px 0 60px;
+        }
+        .cart-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+        @media (max-width: 768px) {
+            .cart-layout { grid-template-columns: 1fr; }
+        }
+        .cart-box {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow-sm);
+        }
+        .cart-box h2 {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .cart-item-row {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .cart-item-row:last-child {
+            border-bottom: none;
+        }
+        .cart-item-img {
+            width: 80px;
+            height: 80px;
+            border-radius: var(--radius-sm);
+            object-fit: cover;
+            margin-right: 20px;
+        }
+        .cart-item-info {
+            flex: 1;
+        }
+        .cart-item-info h4 {
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+        .cart-item-price {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        .summary-total {
+            font-size: 1.5rem;
+            font-weight: 700;
+            border-top: 2px solid #eee;
+            padding-top: 15px;
+            margin-top: 15px;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar sticky">
+        <div class="container nav-container">
+            <a href="/" class="logo">
+                <i class="fa-solid fa-burger"></i> Meal<span>Mate</span>
+            </a>
+            <div class="nav-actions">
+                <span style="font-weight: 500; margin-right: 15px;">Hello, {{username}}!</span>
+                <a href="javascript:history.back()" class="btn btn-outline" style="padding: 8px 16px;">Back to Menu</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container cart-page-container">
+        <div class="cart-layout">
+            <div class="cart-box">
+                <h2>Your Items</h2>
+                {% if itemList %}
+                    {% for item in itemList %}
+                    <div class="cart-item-row">
+                        <img src="{{ item.picture }}" class="cart-item-img" alt="{{ item.name }}" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80'">
+                        <div class="cart-item-info">
+                            <h4>{{ item.name }}</h4>
+                            <p style="color: var(--light-text); font-size: 0.9rem;">{{ item.description|truncatechars:50 }}</p>
+                        </div>
+                        <div class="cart-item-price">
+                            ₹{{ item.price }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div style="text-align: center; padding: 40px 0;">
+                        <i class="fa-solid fa-cart-arrow-down" style="font-size: 4rem; color: #ccc; margin-bottom: 20px;"></i>
+                        <h3>Your cart is empty!</h3>
+                        <p style="color: var(--light-text); margin-top: 10px;">Looks like you haven't added anything yet.</p>
+                        <br>
+                        <a href="javascript:history.back()" class="btn btn-primary">Browse Restaurants</a>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="cart-box" style="align-self: start;">
+                <h2>Order Summary</h2>
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span>₹{{ total_price }}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Delivery Fee</span>
+                    <span>₹40.0</span>
+                </div>
+                <div class="summary-row summary-total">
+                    <span>Total</span>
+                    <span>₹{{ total_price|add:40 }}</span>
+                </div>
+                
+                {% if itemList %}
+                <a href="{% url 'checkout' username %}" class="btn btn-primary btn-block btn-glow" style="margin-top: 20px;">Proceed to Checkout</a>
+                {% else %}
+                <button class="btn btn-primary btn-block" disabled style="margin-top: 20px; opacity: 0.5; cursor: not-allowed;">Proceed to Checkout</button>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+</body>
+</html>

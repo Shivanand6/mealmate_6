@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed | MealMate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'delivery/style.css' %}">
+    <style>
+        body { background: var(--light-bg); }
+        .success-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+        .success-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 50px 40px;
+            box-shadow: var(--shadow-lg);
+            max-width: 500px;
+            width: 100%;
+        }
+        .success-icon {
+            font-size: 5rem;
+            color: #4CAF50;
+            margin-bottom: 20px;
+            animation: bounceIn 1s;
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .success-card h1 {
+            color: var(--dark-text);
+            margin-bottom: 15px;
+        }
+        .success-card p {
+            color: var(--light-text);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .address-box {
+            background: var(--light-bg);
+            padding: 15px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 30px;
+            text-align: left;
+            border-left: 4px solid var(--primary-color);
+        }
+        .address-box strong {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--dark-text);
+        }
+    </style>
+</head>
+<body>
+    <div class="success-container">
+        <div class="success-card">
+            <i class="fa-solid fa-circle-check success-icon"></i>
+            <h1>Order Confirmed!</h1>
+            <p>Thank you for your order, <strong>{{ username }}</strong>. Our kitchen has started preparing your delicious food.</p>
+            
+            <div class="address-box">
+                <strong><i class="fa-solid fa-location-dot"></i> Delivery Address:</strong>
+                {{ customer.address }}
+            </div>
+            
+            <p style="font-size: 0.9rem; margin-bottom: 30px;">
+                Your order will be delivered shortly. Track your delivery status on the app!
+            </p>
+
+            <a href="/" class="btn btn-primary btn-block">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

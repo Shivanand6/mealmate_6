@@ -1,0 +1,331 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - {{ restaurant.name }} | MealMate</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet"
+          href="{% static 'delivery/style.css' %}">
+
+    <style>
+
+        body{
+            background: var(--light-bg);
+        }
+
+        .menu-header{
+            padding:120px 0 60px;
+
+            background:
+            linear-gradient(
+                rgba(0,0,0,0.6),
+                rgba(0,0,0,0.6)
+            ),
+            url('{{ restaurant.picture }}')
+            center/cover;
+
+            color:white;
+
+            text-align:center;
+        }
+
+        .menu-header h1{
+
+            font-size:3rem;
+
+            margin-bottom:10px;
+
+            color:white;
+        }
+
+        .menu-header p{
+
+            font-size:1.2rem;
+
+            opacity:0.9;
+        }
+
+        .veg-badge{
+
+            display:inline-block;
+
+            width:15px;
+
+            height:15px;
+
+            border:2px solid #4CAF50;
+
+            border-radius:3px;
+
+            position:relative;
+        }
+
+        .veg-badge::after{
+
+            content:'';
+
+            position:absolute;
+
+            top:50%;
+            left:50%;
+
+            transform:
+            translate(-50%, -50%);
+
+            width:7px;
+
+            height:7px;
+
+            background:#4CAF50;
+
+            border-radius:50%;
+        }
+
+        .non-veg-badge{
+
+            border-color:#F44336;
+        }
+
+        .non-veg-badge::after{
+
+            background:#F44336;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header class="navbar sticky">
+
+    <div class="container nav-container">
+
+        <a href="/"
+           class="logo">
+
+            <i class="fa-solid fa-burger"></i>
+
+            Meal<span>Mate</span>
+
+        </a>
+
+        <div class="nav-actions">
+
+            <span style="
+                font-weight:500;
+                margin-right:15px;
+            ">
+
+                Hello, {{username}}!
+
+            </span>
+
+            <a href="{% url 'show_cart' username %}"
+               class="cart-btn"
+               aria-label="Open Cart">
+
+                <i class="fa-solid fa-shopping-cart"></i>
+
+            </a>
+
+            <a href="{% url 'logout' %}"
+               class="btn btn-outline"
+               style="padding:8px 16px;">
+
+                Logout
+
+            </a>
+
+        </div>
+
+    </div>
+
+</header>
+
+<div class="menu-header">
+
+    <div class="container">
+
+        <h1>
+            {{ restaurant.name }}
+        </h1>
+
+        <p>
+
+            <i class="fa-solid fa-utensils"></i>
+
+            {{ restaurant.cuisine }}
+
+            &nbsp; | &nbsp;
+
+            <i class="fa-solid fa-star"></i>
+
+            {{ restaurant.rating }}
+
+        </p>
+
+        <br>
+
+        <a href="{% url 'show_cart' username %}"
+           class="btn btn-primary btn-glow">
+
+            View Cart
+
+            <i class="fa-solid fa-arrow-right"></i>
+
+        </a>
+
+    </div>
+
+</div>
+
+<main class="container section-padding">
+
+    <div class="section-header">
+
+        <h2>
+            Our Menu
+        </h2>
+
+        <p>
+            Delicious items waiting for you
+        </p>
+
+    </div>
+
+    <div class="meal-grid">
+
+        {% for item in itemList %}
+
+        <div class="meal-card">
+
+            <div class="meal-img">
+
+                <img src="{{ item.picture }}"
+                     alt="{{ item.name }}"
+
+                     onerror="
+                     this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
+                     ">
+
+            </div>
+
+            <div class="meal-info">
+
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:flex-start;
+                    margin-bottom:8px;
+                ">
+
+                    <h3>
+                        {{ item.name }}
+                    </h3>
+
+                    <div class="
+                    {% if item.vegeterian %}
+                        veg-badge
+                    {% else %}
+                        veg-badge non-veg-badge
+                    {% endif %}
+                    ">
+                    </div>
+
+                </div>
+
+                <p class="meal-desc">
+
+                    {{ item.description }}
+
+                </p>
+
+                <div class="meal-bottom">
+
+                    <span class="price">
+
+                        ₹{{ item.price }}
+
+                    </span>
+
+                    <a href="{% url 'add_to_cart' item.id username %}"
+                       class="btn btn-icon add-to-cart"
+
+                       style="
+                       display:flex;
+                       align-items:center;
+                       justify-content:center;
+                       ">
+
+                        <i class="fa-solid fa-plus"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <div style="
+            grid-column:1 / -1;
+            text-align:center;
+            padding:40px;
+        ">
+
+            <i class="fa-solid fa-utensils"
+               style="
+               font-size:3rem;
+               color:#ccc;
+               margin-bottom:20px;
+               ">
+            </i>
+
+            <h2>
+                Menu is currently empty.
+            </h2>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <div class="text-center mt-4">
+
+        <a href="javascript:history.back()"
+           class="btn btn-outline">
+
+            Back to Restaurants
+
+        </a>
+
+    </div>
+
+</main>
+
+<footer class="footer"
+        style="padding-top:40px;">
+
+    <div class="container footer-bottom">
+
+        <p>
+            &copy; 2026 MealMate. All rights reserved.
+        </p>
+
+    </div>
+
+</footer>
+
+</body>
+</html>

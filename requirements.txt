@@ -1,0 +1,7 @@
+
+django
+groq
+razorpay
+requests
+python-dotenv
+pillow

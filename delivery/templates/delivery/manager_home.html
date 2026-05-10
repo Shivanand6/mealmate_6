@@ -1,0 +1,212 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Hotel Manager Dashboard
+    </title>
+
+    <link rel="stylesheet"
+          href="{% static 'delivery/style.css' %}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+
+        body{
+
+            background:#f5f5f5;
+        }
+
+        .manager-container{
+
+            max-width:1100px;
+
+            margin:auto;
+
+            padding:140px 20px 50px;
+        }
+
+        .manager-header{
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            margin-bottom:40px;
+
+            gap:20px;
+
+            flex-wrap:wrap;
+        }
+
+        .restaurant-card{
+
+            background:white;
+
+            padding:25px;
+
+            border-radius:20px;
+
+            margin-bottom:25px;
+
+            box-shadow:
+            0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .restaurant-card h2{
+
+            margin-bottom:10px;
+        }
+
+        .status-approved{
+
+            color:green;
+
+            font-weight:700;
+        }
+
+        .status-pending{
+
+            color:red;
+
+            font-weight:700;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header class="navbar sticky">
+
+    <div class="container nav-container">
+
+        <a href="/"
+           class="logo">
+
+            <i class="fa-solid fa-burger"></i>
+
+            Meal<span>Mate</span>
+
+        </a>
+
+        <div class="nav-actions">
+
+            <a href="{% url 'logout' %}"
+               class="btn btn-outline"
+               style="padding:8px 16px;">
+
+                Logout
+
+            </a>
+
+        </div>
+
+    </div>
+
+</header>
+
+<div class="manager-container">
+
+    <div class="manager-header">
+
+        <div>
+
+            <h1>
+                Hotel Manager Dashboard
+            </h1>
+
+            <p>
+                Welcome {{ username }}
+            </p>
+
+        </div>
+
+        <a href="{% url 'open_add_restaurant' %}"
+           class="btn btn-primary">
+
+            Add Restaurant
+
+        </a>
+
+    </div>
+
+    {% for r in restaurants %}
+
+        <div class="restaurant-card">
+
+            <h2>
+                {{ r.name }}
+            </h2>
+
+            <p>
+                Cuisine:
+                {{ r.cuisine }}
+            </p>
+
+            <p>
+                Rating:
+                {{ r.rating }}
+            </p>
+
+            <p>
+
+                Status:
+
+                {% if r.approved %}
+
+                    <span class="status-approved">
+
+                        Approved
+
+                    </span>
+
+                {% else %}
+
+                    <span class="status-pending">
+
+                        Pending Approval
+
+                    </span>
+
+                {% endif %}
+
+            </p>
+
+            <br>
+
+            <a href="/open_update_menu/{{r.id}}"
+               class="btn btn-primary">
+
+                Manage Menu
+
+            </a>
+
+        </div>
+
+    {% empty %}
+
+        <h3>
+            No restaurants added yet.
+        </h3>
+
+    {% endfor %}
+
+</div>
+
+</body>
+
+</html>

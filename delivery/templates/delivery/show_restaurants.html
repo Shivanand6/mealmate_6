@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show Restaurants | MealMate Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'delivery/style.css' %}">
+    <style>
+        .admin-container { padding: 120px 0 60px; min-height: 80vh; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .admin-table-container { background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); overflow: hidden; }
+        .admin-table { width: 100%; border-collapse: collapse; }
+        .admin-table th, .admin-table td { padding: 20px; text-align: left; border-bottom: 1px solid #eee; }
+        .admin-table th { background-color: #f8f9fa; font-weight: 600; color: var(--text-color); }
+        .admin-table img { width: 80px; height: 80px; object-fit: cover; border-radius: 10px; }
+        .admin-table tr:hover { background-color: #fafafa; }
+        .action-links { display: flex; gap: 10px; flex-direction: column; }
+        .action-links a { color: var(--primary-color); text-decoration: none; font-weight: 500; transition: 0.3s; }
+        .action-links a:hover { color: var(--secondary-color); }
+        .action-links a.delete { color: #dc3545; }
+        .action-links a.delete:hover { color: #a71d2a; }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo"><i class="fa-solid fa-burger"></i> Meal<span>Mate</span> Admin</a>
+            <div class="nav-actions">
+                <a href="{% url 'open_add_restaurant' %}" class="btn btn-primary" style="padding: 8px 16px;">Add Restaurant</a>
+                <a href="/" class="btn btn-outline" style="padding: 8px 16px;">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="admin-container">
+        <div class="container">
+            <div class="admin-header">
+                <h2>Manage Restaurants</h2>
+            </div>
+            
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Picture</th>
+                            <th>Restaurant Name</th>
+                            <th>Cuisine</th>
+                            <th>Rating</th>
+                            <th>Operations</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in restaurantList %}
+                            <tr>
+                                <td><img src="{{ r.picture }}" alt="{{ r.name }}"></td>
+                                <td><strong>{{ r.name }}</strong></td>
+                                <td>{{ r.cuisine }}</td>
+                                <td><i class="fa-solid fa-star" style="color: #FFD700;"></i> {{ r.rating }}</td>
+                                <td class="action-links">
+                                    <a href="{% url 'open_update_restaurant' r.id %}"><i class="fa-solid fa-pen-to-square"></i> Edit Info</a>
+                                    <a href="{% url 'open_update_menu' r.id %}"><i class="fa-solid fa-list"></i> Update Menu</a>
+                                    <a href="{% url 'delete_restaurant' r.id %}" class="delete"><i class="fa-solid fa-trash"></i> Delete</a>
+                                    <a href="{% url 'approve_restaurant' r.id %}"
+   style="color:green;">
+
+    <i class="fa-solid fa-check"></i>
+
+    Approve Restaurant
+
+</a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 40px;">No restaurants found.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

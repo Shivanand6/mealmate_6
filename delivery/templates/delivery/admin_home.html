@@ -1,0 +1,187 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Admin Dashboard | MealMate
+    </title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet"
+          href="{% static 'delivery/style.css' %}">
+
+    <style>
+
+        .admin-dashboard{
+
+            padding:120px 0 60px;
+
+            min-height:100vh;
+
+            background:#f8f9fa;
+        }
+
+        .admin-cards{
+
+            display:flex;
+
+            justify-content:center;
+
+            gap:30px;
+
+            margin-top:50px;
+
+            flex-wrap:wrap;
+        }
+
+        .admin-card{
+
+            background:white;
+
+            padding:40px;
+
+            border-radius:20px;
+
+            box-shadow:0 10px 30px rgba(0,0,0,0.08);
+
+            transition:0.3s ease;
+
+            text-align:center;
+
+            width:300px;
+
+            text-decoration:none;
+
+            color:inherit;
+        }
+
+        .admin-card:hover{
+
+            transform:translateY(-10px);
+
+            box-shadow:0 15px 40px rgba(255,107,53,0.2);
+        }
+
+        .admin-card i{
+
+            font-size:3rem;
+
+            color:#ff6b35;
+
+            margin-bottom:20px;
+        }
+
+        .admin-card h3{
+
+            margin-bottom:10px;
+        }
+
+        .admin-card p{
+
+            color:#777;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header class="navbar sticky">
+
+    <div class="container nav-container">
+
+        <a href="/"
+           class="logo">
+
+            <i class="fa-solid fa-burger"></i>
+
+            Meal<span>Mate</span>
+
+        </a>
+
+        <div class="nav-actions">
+
+            <a href="{% url 'logout' %}"
+               class="btn btn-outline"
+               style="padding:8px 16px;">
+
+                Logout
+
+            </a>
+
+        </div>
+
+    </div>
+
+</header>
+
+<main class="admin-dashboard">
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <h2>
+                Welcome Admin
+            </h2>
+
+            <p>
+                Manage restaurants and platform approvals
+            </p>
+
+        </div>
+
+        <div class="admin-cards">
+
+            <a href="{% url 'open_add_restaurant' %}"
+               class="admin-card">
+
+                <i class="fa-solid fa-plus-circle"></i>
+
+                <h3>
+                    Add Restaurant
+                </h3>
+
+                <p>
+                    Register a new restaurant
+                </p>
+
+            </a>
+
+            <a href="{% url 'open_show_restaurant' %}"
+               class="admin-card">
+
+                <i class="fa-solid fa-store"></i>
+
+                <h3>
+                    Manage Restaurants
+                </h3>
+
+                <p>
+                    Approve, edit and manage restaurants
+                </p>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</main>
+
+</body>
+
+</html>

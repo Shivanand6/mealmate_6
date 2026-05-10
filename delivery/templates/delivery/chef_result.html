@@ -1,0 +1,329 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Chef Recipe</title>
+
+    <link rel="stylesheet"
+          href="{% static 'delivery/style.css' %}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="chef-page">
+
+    <div class="chef-container">
+
+        <div class="chef-top">
+
+            <a href="/"
+               class="back-btn">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                Home
+
+            </a>
+
+            <button class="dark-mode-btn"
+                    onclick="toggleDarkMode()">
+
+                🌙
+
+            </button>
+
+        </div>
+
+        <div class="chef-header">
+
+            <h1>
+
+                👨‍🍳 AI Chef Recipe
+
+            </h1>
+
+            <p>
+
+                Your smart AI-generated recipe
+                is ready.
+
+            </p>
+
+        </div>
+
+        <div class="recipe-card">
+
+            <div class="recipe-content">
+
+                {{ result|linebreaks }}
+
+            </div>
+
+        </div>
+
+        <div class="recipe-highlights">
+
+            <div class="highlight-card">
+
+                <div class="highlight-icon">
+
+                    ⏱
+
+                </div>
+
+                <h3>
+
+                    Quick Cooking
+
+                </h3>
+
+                <p>
+
+                    Easy step-by-step recipe
+                    generation.
+
+                </p>
+
+            </div>
+
+            <div class="highlight-card">
+
+                <div class="highlight-icon">
+
+                    🔥
+
+                </div>
+
+                <h3>
+
+                    AI Smart Tips
+
+                </h3>
+
+                <p>
+
+                    Personalized chef suggestions
+                    included.
+
+                </p>
+
+            </div>
+
+            <div class="highlight-card">
+
+                <div class="highlight-icon">
+
+                    🍴
+
+                </div>
+
+                <h3>
+
+                    World Recipes
+
+                </h3>
+
+                <p>
+
+                    Generate dishes from any cuisine.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="{% static 'delivery/darkmode.js' %}"></script>
+
+<style>
+
+.chef-page{
+
+    min-height:100vh;
+
+    padding:50px 20px;
+
+    background:
+    linear-gradient(
+    135deg,
+    #fff4ef,
+    #ffffff
+    );
+}
+
+.chef-container{
+
+    max-width:1100px;
+
+    margin:auto;
+}
+
+.chef-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-bottom:30px;
+}
+
+.back-btn{
+
+    background:#ff6b35;
+
+    color:white;
+
+    padding:12px 18px;
+
+    border-radius:50px;
+
+    text-decoration:none;
+}
+
+.chef-header{
+
+    text-align:center;
+
+    margin-bottom:40px;
+}
+
+.chef-header h1{
+
+    font-size:3rem;
+
+    color:#ff6b35;
+
+    margin-bottom:10px;
+}
+
+.chef-header p{
+
+    color:#666;
+
+    font-size:1.1rem;
+}
+
+.recipe-card{
+
+    background:white;
+
+    border-radius:30px;
+
+    padding:40px;
+
+    box-shadow:
+    0 20px 50px rgba(0,0,0,0.08);
+
+    margin-bottom:50px;
+}
+
+.recipe-content{
+
+    line-height:2;
+
+    font-size:1.05rem;
+}
+
+.recipe-highlights{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(250px,1fr));
+
+    gap:24px;
+}
+
+.highlight-card{
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:24px;
+
+    text-align:center;
+
+    box-shadow:
+    0 15px 35px rgba(0,0,0,0.06);
+
+    transition:0.3s ease;
+}
+
+.highlight-card:hover{
+
+    transform:translateY(-8px);
+}
+
+.highlight-icon{
+
+    font-size:3rem;
+
+    margin-bottom:18px;
+}
+
+.highlight-card h3{
+
+    margin-bottom:12px;
+
+    color:#ff6b35;
+}
+
+.highlight-card p{
+
+    color:#666;
+}
+
+.dark-mode .chef-page{
+
+    background:#121212;
+}
+
+.dark-mode .recipe-card,
+.dark-mode .highlight-card{
+
+    background:#1f1f1f;
+
+    color:white;
+}
+
+.dark-mode .chef-header p,
+.dark-mode .highlight-card p{
+
+    color:#ccc;
+}
+
+@media(max-width:768px){
+
+    .chef-header h1{
+
+        font-size:2.3rem;
+    }
+
+    .recipe-card{
+
+        padding:25px;
+    }
+}
+
+</style>
+
+</body>
+
+</html>
