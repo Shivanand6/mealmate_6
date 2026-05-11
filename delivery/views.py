@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 
 from .models import Customer, Restaurant, Item, Cart
+from django.http import JsonResponse
+import json
 
 import razorpay
 from django.conf import settings
@@ -755,7 +757,6 @@ def checkout(request, username):
 
     )
 
-
 def orders(request, username):
 
     customer = get_object_or_404(
@@ -776,7 +777,27 @@ def orders(request, username):
 
     total_price = 0
 
-    if cart:
+    # SHOW LAST SUCCESSFUL ORDER
+
+    if "last_order_items" in request.session:
+
+        cart_items = request.session.get(
+
+            "last_order_items",
+
+            []
+
+        )
+
+        total_price = request.session.get(
+
+            "last_total",
+
+            0
+
+        )
+
+    elif cart:
 
         cart_items = cart.items.all()
 
@@ -801,7 +822,105 @@ def orders(request, username):
         }
 
     )
+    # =========================
+# VERIFY PAYMENT
+# =========================
 
+def verify_payment(request):
+
+    if request.method == "POST":
+
+        data = json.loads(request.body)
+
+        razorpay_payment_id = data.get("razorpay_payment_id")
+
+        razorpay_order_id = data.get("razorpay_order_id")
+
+        razorpay_signature = data.get("razorpay_signature")
+
+        client = razorpay.Client(
+
+            auth=(
+
+                settings.RAZORPAY_KEY_ID,
+
+                settings.RAZORPAY_KEY_SECRET
+
+            )
+
+        )
+
+        params_dict = {
+
+            'razorpay_order_id': razorpay_order_id,
+
+            'razorpay_payment_id': razorpay_payment_id,
+
+            'razorpay_signature': razorpay_signature
+
+        }
+
+        try:
+
+            client.utility.verify_payment_signature(params_dict)
+
+            username = request.session.get("username")
+
+            customer = Customer.objects.get(
+
+                username=username
+
+            )
+
+            cart = Cart.objects.get(
+
+                customer=customer
+
+            )
+
+            # STORE ORDER ITEMS BEFORE CLEARING CART
+
+            request.session["last_order_items"] = [
+
+                {
+
+                    "name": item.name,
+
+                    "price": float(item.price)
+
+                }
+
+                for item in cart.items.all()
+
+            ]
+
+            request.session["last_total"] = cart.total_price() + 40
+
+            # CLEAR CART AFTER SUCCESSFUL PAYMENT
+
+            cart.items.clear()
+
+            return JsonResponse({
+
+                "status": "success"
+
+            })
+
+        except Exception as e:
+
+            return JsonResponse({
+
+                "status": "failed",
+
+                "error": str(e)
+
+            })
+
+    return JsonResponse({
+
+        "status": "invalid request"
+
+    })
 
 # =========================
 # AI FOOD RECOMMENDER

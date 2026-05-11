@@ -313,6 +313,8 @@
 
 {% if not error %}
 
+{% if not error %}
+
 <script>
 
 document.getElementById("rzp-button").onclick = function(e){
@@ -335,10 +337,57 @@ document.getElementById("rzp-button").onclick = function(e){
 
         "handler": function (response){
 
-            alert("✅ Payment Successful!");
+            fetch("{% url 'verify_payment' %}", {
 
-            window.location.href =
-            "{% url 'orders' username %}";
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type": "application/json",
+
+                    "X-CSRFToken": "{{ csrf_token }}"
+
+                },
+
+                body: JSON.stringify({
+
+                    razorpay_payment_id: response.razorpay_payment_id,
+
+                    razorpay_order_id: response.razorpay_order_id,
+
+                    razorpay_signature: response.razorpay_signature
+
+                })
+
+            })
+
+            .then(response => response.json())
+
+            .then(data => {
+
+                if(data.status === "success"){
+
+                    alert("✅ Payment Successful!");
+
+                    window.location.href = "{% url 'orders' username %}";
+
+                }
+
+                else{
+
+                    alert("❌ Payment verification failed!");
+
+                }
+
+            })
+
+            .catch(error => {
+
+                console.error(error);
+
+                alert("Something went wrong!");
+
+            });
 
         },
 
@@ -356,6 +405,16 @@ document.getElementById("rzp-button").onclick = function(e){
 
             "color": "#ff6b35"
 
+        },
+
+        "modal": {
+
+            "ondismiss": function(){
+
+                console.log("Payment popup closed");
+
+            }
+
         }
 
     };
@@ -367,7 +426,6 @@ document.getElementById("rzp-button").onclick = function(e){
 };
 
 </script>
-
 {% endif %}
 
 </body>
