@@ -823,7 +823,7 @@ def orders(request, username):
 
     )
     
-    # =========================
+# =========================
 # VERIFY PAYMENT
 # =========================
 
@@ -879,49 +879,72 @@ def verify_payment(request):
 
             )
 
-# SAVE ORDER IN DATABASE
+            # SAVE ORDER IN DATABASE
 
-cart_items = cart.items.all()
+            cart_items = cart.items.all()
 
-if cart_items.exists():
+            if cart_items.exists():
 
-    restaurant = cart_items.first().restaurant
+                restaurant = cart_items.first().restaurant
 
-    order = Order.objects.create(
+                order = Order.objects.create(
 
-        customer=customer,
+                    customer=customer,
 
-        restaurant=restaurant,
+                    restaurant=restaurant,
 
-        total_amount=cart.total_price() + 40,
+                    total_amount=cart.total_price() + 40,
 
-        status="Order Placed"
+                    status="Order Placed"
 
-    )
+                )
 
-    order.items.set(cart_items)
+                order.items.set(cart_items)
 
-# STORE ORDER FOR CUSTOMER VIEW
+            # STORE ORDER FOR CUSTOMER VIEW
 
-request.session["last_order_items"] = [
+            request.session["last_order_items"] = [
 
-    {
+                {
 
-        "name": item.name,
+                    "name": item.name,
 
-        "price": float(item.price)
+                    "price": float(item.price)
 
-    }
+                }
 
-    for item in cart_items
+                for item in cart_items
 
-]
+            ]
 
-request.session["last_total"] = cart.total_price() + 40
+            request.session["last_total"] = cart.total_price() + 40
 
-# CLEAR CART
+            # CLEAR CART
 
-cart.items.clear()
+            cart.items.clear()
+
+            return JsonResponse({
+
+                "status": "success"
+
+            })
+
+        except Exception as e:
+
+            return JsonResponse({
+
+                "status": "failed",
+
+                "error": str(e)
+
+            })
+
+    return JsonResponse({
+
+        "status": "invalid request"
+
+    })
+    
 # =========================
 # AI FOOD RECOMMENDER
 # =========================
