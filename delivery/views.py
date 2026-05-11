@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 
-from .models import Customer, Restaurant, Item, Cart
+from .models import Customer, Restaurant, Item, Cart, Order
 from django.http import JsonResponse
 import json
 
@@ -822,6 +822,7 @@ def orders(request, username):
         }
 
     )
+    
     # =========================
 # VERIFY PAYMENT
 # =========================
@@ -878,50 +879,49 @@ def verify_payment(request):
 
             )
 
-            # STORE ORDER ITEMS BEFORE CLEARING CART
+# SAVE ORDER IN DATABASE
 
-            request.session["last_order_items"] = [
+cart_items = cart.items.all()
 
-                {
+if cart_items.exists():
 
-                    "name": item.name,
+    restaurant = cart_items.first().restaurant
 
-                    "price": float(item.price)
+    order = Order.objects.create(
 
-                }
+        customer=customer,
 
-                for item in cart.items.all()
+        restaurant=restaurant,
 
-            ]
+        total_amount=cart.total_price() + 40,
 
-            request.session["last_total"] = cart.total_price() + 40
+        status="Order Placed"
 
-            # CLEAR CART AFTER SUCCESSFUL PAYMENT
+    )
 
-            cart.items.clear()
+    order.items.set(cart_items)
 
-            return JsonResponse({
+# STORE ORDER FOR CUSTOMER VIEW
 
-                "status": "success"
+request.session["last_order_items"] = [
 
-            })
+    {
 
-        except Exception as e:
+        "name": item.name,
 
-            return JsonResponse({
+        "price": float(item.price)
 
-                "status": "failed",
+    }
 
-                "error": str(e)
+    for item in cart_items
 
-            })
+]
 
-    return JsonResponse({
+request.session["last_total"] = cart.total_price() + 40
 
-        "status": "invalid request"
+# CLEAR CART
 
-    })
-
+cart.items.clear()
 # =========================
 # AI FOOD RECOMMENDER
 # =========================
