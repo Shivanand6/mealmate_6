@@ -315,7 +315,7 @@
 
 <script>
 
-document.getElementById("rzp-button").onclick = function(e){
+document.getElementById("rzp-button").onclick = async function(e){
 
     e.preventDefault();
 
@@ -333,41 +333,43 @@ document.getElementById("rzp-button").onclick = function(e){
 
         "order_id": "{{ order_id }}",
 
-        "handler": function (response){
+        "handler": async function (response){
 
-            fetch("{% url 'verify_payment' %}", {
+            try{
 
-                method: "POST",
+                const verifyResponse = await fetch("/verify-payment/", {
 
-                headers: {
+                    method: "POST",
 
-                    "Content-Type": "application/json",
+                    headers: {
 
-                    "X-CSRFToken": "{{ csrf_token }}"
+                        "Content-Type": "application/json",
 
-                },
+                        "X-CSRFToken": "{{ csrf_token }}"
 
-                body: JSON.stringify({
+                    },
 
-                    razorpay_payment_id: response.razorpay_payment_id,
+                    body: JSON.stringify({
 
-                    razorpay_order_id: response.razorpay_order_id,
+                        razorpay_payment_id: response.razorpay_payment_id,
 
-                    razorpay_signature: response.razorpay_signature
+                        razorpay_order_id: response.razorpay_order_id,
 
-                })
+                        razorpay_signature: response.razorpay_signature
 
-            })
+                    })
 
-            .then(response => response.json())
+                });
 
-            .then(data => {
+                const data = await verifyResponse.json();
 
                 if(data.status === "success"){
 
                     alert("✅ Payment Successful!");
 
-                    window.location.href = "{% url 'orders' username %}";
+                    // Redirect main page properly
+
+                    window.location.replace("/orders/{{ username }}/");
 
                 }
 
@@ -377,15 +379,15 @@ document.getElementById("rzp-button").onclick = function(e){
 
                 }
 
-            })
+            }
 
-            .catch(error => {
+            catch(error){
 
                 console.error(error);
 
-                alert("Something went wrong!");
+                alert("Something went wrong during payment verification!");
 
-            });
+            }
 
         },
 
@@ -411,7 +413,9 @@ document.getElementById("rzp-button").onclick = function(e){
 
                 console.log("Payment popup closed");
 
-            }
+            },
+
+            "escape": false
 
         }
 
@@ -424,6 +428,7 @@ document.getElementById("rzp-button").onclick = function(e){
 };
 
 </script>
+
 {% endif %}
 
 </body>
