@@ -125,8 +125,10 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# RAZORPAY_KEY_ID = 'rzp_test_lTV3Hhr4ayCQ'
-# RAZORPAY_KEY_SECRET = 'eFILRtRtJyDqE4Qkz5a3K9'
+import os
+
+RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID")
+RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET")
 
 
 
